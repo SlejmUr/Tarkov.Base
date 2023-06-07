@@ -1,36 +1,22 @@
 ﻿using BepInEx;
 using Comfort.Common;
 using EFT;
-using System;
-using System.Collections.Generic;
 using Tarkov.Base.BasePatch;
+using Tarkov.Base.BasePatch.NonSecure;
 using UnityEngine.SceneManagement;
 
 namespace Tarkov.Base
 {
-    [BepInPlugin("TarkovBase", "TarkovBase", "0.1")]
+    [BepInPlugin("TarkovBase", "TarkovBase", "1.0")]
     public class Plugin : BaseUnityPlugin
     {
         public static Plugin Instance;
         public static GameWorld gameWorld { get; private set; }
-        public static List<Action> SceneLoadActions = new();
-        public static List<Action> AwakeBeforeScene = new();
         private void Awake()
         {
             CorePatch();
             NonSercurePatch();
-            foreach (Action action in AwakeBeforeScene)
-            {
-                try
-                {
-                    action();
-                }
-                catch (Exception ex)
-                {
-                    Logger.LogError($"{GetType().Name}: {ex}");
-                    throw;
-                }
-            }
+
             Logger.LogInfo($"Plugin TarkovBase is loaded!");
             SceneManager.sceneLoaded += SceneManager_sceneLoaded;
             Instance = this;
@@ -39,18 +25,6 @@ namespace Tarkov.Base
         private void SceneManager_sceneLoaded(Scene arg0, LoadSceneMode arg1)
         {
             gameWorld = Singleton<GameWorld>.Instance;
-            foreach (Action action in SceneLoadActions)
-            {
-                try
-                {
-                    action();
-                }
-                catch (Exception ex)
-                {
-                    Logger.LogError($"{GetType().Name}: {ex}");
-                    throw;
-                }
-            }
         }
 
         private void CorePatch()
@@ -78,11 +52,8 @@ namespace Tarkov.Base
                 return;
             }
 
-            new ConsistencySinglePatch().Enable();
-            new ConsistencyMultiPatch().Enable();
-            new BattlEyePatch().Enable();
-            new SslCertificatePatch().Enable();
-            new UnityWebRequestPatch().Enable();
+            new TransportPrefixPatch().Enable();
+            new WebSocketPatch().Enable();
         }
     }
 }

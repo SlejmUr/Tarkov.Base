@@ -30,14 +30,6 @@ namespace Tarkov.Base.Core
         public static Type BackendStaticConfigurationType { get; set; }
         public static object BackendStaticConfigurationConfigInstance { get; set; }
 
-        public static class CharacterControllerSettings
-        {
-            public static object CharacterControllerInstance { get; set; }
-            public static CharacterControllerSpawner.Mode ObservedPlayerMode { get; set; }
-            public static CharacterControllerSpawner.Mode ClientPlayerMode { get; set; }
-            public static CharacterControllerSpawner.Mode BotPlayerMode { get; set; }
-        }
-
         /// <summary>
         /// A Key/Value dictionary of storing & obtaining an array of types by name
         /// </summary>
@@ -399,9 +391,9 @@ namespace Tarkov.Base.Core
             }
         }
 
-        public static ClientApplication<ISession> GetClientApp()
+        public static ClientApplication<IBackEndSession> GetClientApp()
         {
-            return Singleton<ClientApplication<ISession>>.Instance;
+            return Singleton<ClientApplication<IBackEndSession>>.Instance;
         }
 
         public static TarkovApplication GetMainApp()
@@ -475,20 +467,6 @@ namespace Tarkov.Base.Core
                 && GetAllMethodsForType(x).Any(x => x.Name == "GetItemsInSlots")));
 
             PoolManagerType = EftTypes.Single(x => GetAllMethodsForType(x).Any(x => x.Name == "LoadBundlesAndCreatePools"));
-
-            if (BackendStaticConfigurationConfigInstance != null && CharacterControllerSettings.CharacterControllerInstance == null)
-            {
-                CharacterControllerSettings.CharacterControllerInstance = GetFieldOrPropertyFromInstance<object>(BackendStaticConfigurationConfigInstance, "CharacterController", false);
-            }
-
-            if (CharacterControllerSettings.CharacterControllerInstance != null && CharacterControllerSettings.ClientPlayerMode == null)
-            {
-                CharacterControllerSettings.ClientPlayerMode = GetFieldOrPropertyFromInstance<CharacterControllerSpawner.Mode>(CharacterControllerSettings.CharacterControllerInstance, "ClientPlayerMode", false);
-
-                CharacterControllerSettings.ObservedPlayerMode = GetFieldOrPropertyFromInstance<CharacterControllerSpawner.Mode>(CharacterControllerSettings.CharacterControllerInstance, "ObservedPlayerMode", false);
-
-                CharacterControllerSettings.BotPlayerMode = GetFieldOrPropertyFromInstance<CharacterControllerSpawner.Mode>(CharacterControllerSettings.CharacterControllerInstance, "BotPlayerMode", false);
-            }
         }
     }
 }

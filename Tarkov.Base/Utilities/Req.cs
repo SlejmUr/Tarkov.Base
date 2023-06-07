@@ -6,11 +6,13 @@ using UnityEngine;
 using ComponentAce.Compression.Libs.zlib;
 using System.Threading.Tasks;
 using Tarkov.Base.Core;
+using System.Net.Http;
 
 namespace Tarkov.Base.Utilities
 {
     public class Req : IDisposable
     {
+        private static HttpClient client;
         public static string Session;
         public static string RemoteEndPoint;
         public bool isUnity;
@@ -31,12 +33,22 @@ namespace Tarkov.Base.Utilities
                 Session = PatchConstants.GetPHPSESSID();
             if (string.IsNullOrEmpty(RemoteEndPoint))
                 RemoteEndPoint = PatchConstants.GetBackendUrl();
+            client = new();
+            client.Timeout = new TimeSpan(0, 0, 0, 0, 1000);
+            var builder = new UriBuilder(RemoteEndPoint);
+            builder.Port = int.Parse(RemoteEndPoint.Split(':')[2]);
+            client.BaseAddress = builder.Uri;
         }
 
         public Req(string session, string remoteEndPoint)
         {
             Session = session;
             RemoteEndPoint = remoteEndPoint;
+            client = new();
+            client.Timeout = new TimeSpan(0, 0, 0, 0, 1000);
+            var builder = new UriBuilder(RemoteEndPoint);
+            builder.Port = int.Parse(RemoteEndPoint.Split(':')[2]);
+            client.BaseAddress = builder.Uri;
         }
 
         /// <summary>
@@ -59,41 +71,43 @@ namespace Tarkov.Base.Utilities
             if (!Uri.IsWellFormedUriString(fullUri, UriKind.Absolute))
                 fullUri = RemoteEndPoint + fullUri;
 
-            WebRequest request = WebRequest.Create(new Uri(fullUri));
-            //var request = WebRequest.CreateHttp(fullUri);
-
             if (!string.IsNullOrEmpty(Session))
             {
-                request.Headers.Add("Cookie", $"PHPSESSID={Session}");
-                request.Headers.Add("SessionId", Session);
+                client.DefaultRequestHeaders.Add("Cookie", $"PHPSESSID={Session}");
+                client.DefaultRequestHeaders.Add("SessionId", Session);
             }
 
-            request.Headers.Add("Accept-Encoding", "deflate");
-
-            request.Method = method;
+            client.DefaultRequestHeaders.Add("Accept-Encoding", "deflate");
 
             if (method != "GET" && !string.IsNullOrEmpty(data))
             {
                 // set request body
                 byte[] bytes = compress ? SimpleZlib.CompressToBytes(data, zlibConst.Z_BEST_COMPRESSION) : Encoding.UTF8.GetBytes(data);
 
-                request.ContentType = "application/json";
-                request.ContentLength = bytes.Length;
-
+                client.DefaultRequestHeaders.Add("Content-Type", "application/json");
                 if (compress)
                 {
-                    request.Headers.Add("content-encoding", "deflate");
+                    client.DefaultRequestHeaders.Add("content-encoding", "deflate");
                 }
+                var byteArrayContent = new ByteArrayContent(bytes, 0, bytes.Length);
+                try
+                {
+                    var res = client.PostAsync(url, byteArrayContent).Result;
 
-                using Stream stream = request.GetRequestStream();
-                stream.Write(bytes, 0, bytes.Length);
+                    return res.Content.ReadAsStreamAsync().Result;
+                }
+                catch (Exception e)
+                {
+                    if (isUnity)
+                        Debug.LogError(e);
+                }
+                return null;
             }
 
             // get response stream
             try
             {
-                WebResponse response = request.GetResponse();
-                return response.GetResponseStream();
+                return client.GetStreamAsync(url).Result;
             }
             catch (Exception e)
             {

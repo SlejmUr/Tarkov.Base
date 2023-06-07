@@ -33,7 +33,7 @@ namespace Tarkov.Base.BasePatch.NonSecure
         }
 
         [PatchPrefix]
-        private static bool PatchPrefix(ref GStruct22 legacyParams)
+        private static bool PatchPrefix(ref Request legacyParams)
         {
             legacyParams.Url = legacyParams.Url
                 .Replace("https://", "")
@@ -60,7 +60,6 @@ namespace Tarkov.Base.BasePatch.NonSecure
 
             if (searchIndex == -1)
             {
-                //Logger.LogError($"{nameof(TransportPrefixPatch)} failed: Could not find reference code.");
                 return instructions;
             }
 
