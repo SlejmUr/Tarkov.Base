@@ -13,60 +13,81 @@
 		<PackageReference Include="UnityEngine.Modules" Version="2019.4.39" IncludeAssets="compile" />
 	</ItemGroup>
 	<ItemGroup>
+	  <ProjectReference Include="..\Tarkov.Base\Tarkov.Base.csproj" />
+	</ItemGroup>
+	<ItemGroup>
 	  <Reference Include="Assembly-CSharp">
 	    <HintPath>..\..\Tarkov.References\Assembly-CSharp.dll</HintPath>
+	    <Private>False</Private>
+	  </Reference>
+	  <Reference Include="Assembly-CSharp-firstpass">
+	    <HintPath>..\..\Tarkov.References\Assembly-CSharp-firstpass.dll</HintPath>
+	    <Private>False</Private>
 	  </Reference>
 	  <Reference Include="bsg.componentace.compression.libs.zlib">
 	    <HintPath>..\..\Tarkov.References\bsg.componentace.compression.libs.zlib.dll</HintPath>
+	    <Private>False</Private>
 	  </Reference>
 	  <Reference Include="com.unity.multiplayer-hlapi.Runtime">
 	    <HintPath>..\..\Tarkov.References\com.unity.multiplayer-hlapi.Runtime.dll</HintPath>
+	    <Private>False</Private>
 	  </Reference>
 	  <Reference Include="Comfort">
 	    <HintPath>..\..\Tarkov.References\Comfort.dll</HintPath>
+	    <Private>False</Private>
 	  </Reference>
 	  <Reference Include="Comfort.Unity">
 	    <HintPath>..\..\Tarkov.References\Comfort.Unity.dll</HintPath>
+	    <Private>False</Private>
 	  </Reference>
 	  <Reference Include="DissonanceVoip">
 	    <HintPath>..\..\Tarkov.References\DissonanceVoip.dll</HintPath>
+	    <Private>False</Private>
 	  </Reference>
 	  <Reference Include="FilesChecker">
 	    <HintPath>..\..\Tarkov.References\FilesChecker.dll</HintPath>
+	    <Private>False</Private>
 	  </Reference>
 	  <Reference Include="Newtonsoft.Json">
 	    <HintPath>..\..\Tarkov.References\Newtonsoft.Json.dll</HintPath>
+	    <Private>False</Private>
 	  </Reference>
 	  <Reference Include="Newtonsoft.Json.UnityConverters">
 	    <HintPath>..\..\Tarkov.References\Newtonsoft.Json.UnityConverters.dll</HintPath>
+	    <Private>False</Private>
 	  </Reference>
 	  <Reference Include="Sirenix.Serialization">
 	    <HintPath>..\..\Tarkov.References\Sirenix.Serialization.dll</HintPath>
+	    <Private>False</Private>
 	  </Reference>
 	  <Reference Include="Sirenix.Serialization.Config">
 	    <HintPath>..\..\Tarkov.References\Sirenix.Serialization.Config.dll</HintPath>
+	    <Private>False</Private>
 	  </Reference>
 	  <Reference Include="Sirenix.Utilities">
 	    <HintPath>..\..\Tarkov.References\Sirenix.Utilities.dll</HintPath>
+	    <Private>False</Private>
 	  </Reference>
 	  <Reference Include="System.Net.Http" />
-	  <Reference Include="Tarkov.Base">
-	    <HintPath>Tarkov.Base.dll</HintPath>
-	  </Reference>
 	  <Reference Include="Unity.ScriptableBuildPipeline">
 	    <HintPath>..\..\Tarkov.References\Unity.ScriptableBuildPipeline.dll</HintPath>
+	    <Private>False</Private>
 	  </Reference>
 	  <Reference Include="UnityEngine">
 	    <HintPath>..\..\Tarkov.References\UnityEngine.dll</HintPath>
+	    <Private>False</Private>
 	  </Reference>
 	  <Reference Include="UnityEngine.AssetBundleModule">
 	    <HintPath>..\..\Tarkov.References\UnityEngine.AssetBundleModule.dll</HintPath>
+	    <Private>False</Private>
 	  </Reference>
 	  <Reference Include="UnityEngine.CoreModule">
 	    <HintPath>..\..\Tarkov.References\UnityEngine.CoreModule.dll</HintPath>
+	    <Private>False</Private>
 	  </Reference>
 	  <Reference Include="UnityEngine.UI">
 	    <HintPath>..\..\Tarkov.References\UnityEngine.UI.dll</HintPath>
+	    <Private>False</Private>
 	  </Reference>
 	</ItemGroup>
 </Project>
